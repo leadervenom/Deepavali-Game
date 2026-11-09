@@ -125,6 +125,7 @@
     const m = mapHtml(c);
     const im = c.images ? `<img class="sceneimg" src="${esc(c.images.map)}" alt="Floor map of the room"><img class="sceneimg strip-img" src="${esc(c.images.timeline)}" alt="Timeline: 9:00 key on the hook, 9:03 case opened, 9:05 lights flicker, 9:06 cupcake missing">` : "";
     return `<h2>${esc(c.title)}</h2>${im}
+    ${c.scene.setting ? `<p>${esc(c.scene.setting)}</p>` : ""}
     <ul class="facts">${c.scene.bullets.map(([i, t]) => `<li>${A.icon(i)}<span>${esc(t)}</span></li>`).join("")}</ul>
     <div class="mapwrap" id="mapwrap">${m.map}</div>
     <div class="card spotinfo" id="spotinfo">${m.info}</div>
@@ -133,7 +134,7 @@
   }
   function castV(c) {
     return `<h2>The suspects</h2>
-    <div class="car" id="car">${c.cast.map((p) => `<div class="card pcard">${A.portrait(p.portrait)}<h3>${esc(p.name)}</h3><span class="tag">${esc(p.title)}</span><ul>${li(p.bullets)}</ul></div>`).join("")}</div>
+    <div class="car" id="car">${c.cast.map((p) => `<div class="card pcard">${A.portrait(p.portrait)}<h3>${esc(p.name)}</h3><span class="tag">${esc(p.title)}</span>${p.bio ? `<p>${esc(p.bio)}</p>` : ""}<ul>${li(p.bullets)}</ul></div>`).join("")}</div>
     <div class="dots" id="dots">${c.cast.map((_, i) => `<i class="${i ? "" : "on"}"></i>`).join("")}</div>`;
   }
   function roleV(c, r) {
@@ -180,10 +181,12 @@
     const g = n.general, li = (a) => a.map((x) => `<li>${esc(x)}</li>`).join("");
     const d = (t, b, o) => `<details class="card"${o ? " open" : ""}><summary>${t}</summary>${b}</details>`;
     let o = `<h2>Run of show</h2><p class="mute">Narrator only. Spoilers.</p>`
+      + `<div class="card"><div class="lab" style="margin:0">Phones down bell (all players' phones)</div><div class="bellrow"><button class="btn" data-act="bell" data-down="1"><svg viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>Ring: phones down</button><button class="btn ghost" data-act="bell" data-down="0">Phones up</button></div><p class="mute" id="bellmsg" style="margin:8px 0 0"></p></div>`
       + d("Clock and beats", `<ul class="plain">${g.clock.map(([a, b, c]) => `<li><b style="color:var(--accent)">${a}</b> ${esc(b)} <span class="mute">(${c})</span></li>`).join("")}</ul><div class="lab">Eight beats (Case 1 / Case 2)</div><ul class="plain">${g.beats.map(([a, b, c]) => `<li><b>${esc(a)}</b> <span class="mute">${b}</span><br>${esc(c)}</li>`).join("")}</ul>`, true)
       + d("House rules (read aloud)", `<ol>${li(g.rules)}</ol>`) + d("Casting tips", `<ul>${li(g.casting)}</ul>`) + d("Scoring", `<ul>${li(g.scoring)}</ul>`);
     n.cases.forEach((c) => {
       o += `<h2>${esc(c.title)}</h2><div class="card danger"><div class="lab" style="color:var(--danger);margin:0">The killer</div>${esc(c.killer)}</div>`;
+      if (c.script) o += d("Script (read aloud)", c.script.map((b) => `<div class="lab">${esc(b.t)}</div>${b.l.map(([k, x]) => k === "say" ? `<p>${esc(x)}</p>` : `<p class="mute">Do: ${esc(x)}</p>`).join("")}`).join(""), true);
       o += d("Role codes and clue code words", `<ul class="plain">${c.codes.map(([k, nm, f]) => `<li><b style="color:var(--accent);letter-spacing:.15em">${k}</b> ${esc(nm)} ${f ? `<span class="tag">${f}</span>` : ""}</li>`).join("")}</ul><div class="lab">Announce aloud</div><ul class="plain">${c.drops.map(([a, w]) => `<li>${a}: <b style="color:var(--accent)">${w}</b></li>`).join("")}</ul>`, true);
       o += d("Witnesses (you play them)", `<ul class="plain">${c.witnesses.map(([a, b]) => `<li><b>${esc(a)}</b><br>${esc(b)}</li>`).join("")}</ul>`);
       if (c.tips.length) o += d("Tips and checks", `<ul>${li(c.tips)}</ul>`);
@@ -224,7 +227,6 @@
 
   $("#next").onclick = () => go(step + 1, 1);
   $("#back").onclick = () => go(step - 1, -1);
-  $("#bellbtn").onclick = () => { $("#down").hidden = false; };
 
   app.addEventListener("click", async (e) => {
     const sp = e.target.closest("[data-spot]");
@@ -236,8 +238,18 @@
     const b = e.target.closest("button"); if (!b) return;
     if (b.dataset.case) { selSpot = null; caseId = b.dataset.case; store.set("case", caseId); buzz(20); return go(1, 1); }
     const a = b.dataset.act;
-    if (a === "lock") { delete unlocked.narr; save(); return render(); }
-    if (a === "narr") { await loadNarr(); const r = window.NARR && await decrypt(window.NARR, $("#code").value); if (r) { unlocked.narr = r; save(); return render(); } $("#err").textContent = "Wrong passcode."; return; }
+    if (a === "lock") { delete unlocked.narr; save(); store.set("np", ""); return render(); }
+    if (a === "bell") {
+      const msg = $("#bellmsg"), down = b.dataset.down === "1";
+      msg.textContent = "Sending…";
+      try {
+        const r = await fetch("/api/bell", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ pass: store.get("np") || "", down }) });
+        msg.textContent = r.ok ? (down ? "Bell rung. Phones will blank within a few seconds." : "Phones released.") : r.status === 401 ? "Passcode rejected. Lock and unlock the narrator page again." : "Bell not available (server error).";
+        if (r.ok) buzz(30);
+      } catch (e) { msg.textContent = "No connection."; }
+      return;
+    }
+    if (a === "narr") { await loadNarr(); const pw = $("#code").value; const r = window.NARR && await decrypt(window.NARR, pw); if (r) { unlocked.narr = r; save(); store.set("np", pw.trim()); return render(); } $("#err").textContent = "Wrong passcode."; return; }
     if (a === "restart") { caseId = null; store.set("case", ""); return go(0, -1); }
     if (a === "hiderole") { delete unlocked["r_" + caseId]; save(); return render(); }
     if (a === "role" || a === "clue") {
@@ -256,10 +268,27 @@
   });
   app.addEventListener("keydown", (e) => { const sp = e.target.closest && e.target.closest("[data-spot]"); if (sp && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); sp.dispatchEvent(new MouseEvent("click", { bubbles: true })); return; } if (e.key === "Enter") { const b = app.querySelector("[data-act]:not(.ghost)"); if (b) b.click(); } });
 
+  // ---------- phones-down bell (narrator rings it, players poll) ----------
+  const isNarr = () => location.hash === "#narrator" || location.pathname.replace(/\/$/, "") === "/narrator";
+  let bellId = 0, wokeId = 0, bellDown = false;
+  const showDown = () => { $("#down").hidden = isNarr() || !(bellDown && bellId !== wokeId); };
+  async function pollBell() {
+    if (isNarr() || document.hidden) return;
+    try {
+      const r = await fetch("/api/bell", { cache: "no-store" }); if (!r.ok) return;
+      const s = await r.json(); bellId = s.id; bellDown = s.down;
+      if (s.down && s.id !== wokeId) buzz([60, 40, 60]);
+      showDown();
+    } catch (e) {}
+  }
+  setInterval(pollBell, 3000);
+  document.addEventListener("visibilitychange", pollBell);
+  pollBell();
+
   let taps = 0, tt;
   $("#down .bellbig").addEventListener("click", () => {
     taps++; clearTimeout(tt); tt = setTimeout(() => (taps = 0), 1200);
-    if (taps >= 3) { taps = 0; $("#down").hidden = true; }
+    if (taps >= 3) { taps = 0; wokeId = bellId; showDown(); }
   });
   window.addEventListener("hashchange", render);
 
