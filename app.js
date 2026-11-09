@@ -47,13 +47,14 @@
   }
 
   function scene() {
-    const c = cur(); if (c.visual) return sceneV(c);
-    return `<h2>${esc(c.title)}</h2>${c.images && c.images.hero ? `<img class="sceneimg" src="${esc(c.images.hero)}" alt="">` : ""}
+    const c = cur();
+    const txt = `<h2>${esc(c.title)}</h2>${c.images && c.images.hero ? `<img class="sceneimg" src="${esc(c.images.hero)}" alt="">` : ""}
     <div class="card gold"><div class="lab" style="margin:0">${esc(c.scene.victimLabel || "The victim")}</div>${esc(c.scene.victim)}</div>
     <p>${esc(c.scene.setting)}</p>
     <h3>Timeline everyone knows</h3>
     <ul class="tl">${c.scene.timeline.map(([t, w], i) => `<li style="animation-delay:${0.25 + i * 0.18}s"><b>${esc(t)}</b>${esc(w)}</li>`).join("")}</ul>
     <div class="card"><h3>Witnesses (played by the narrator)</h3><ul class="plain">${c.scene.witnesses.map((w) => `<li>${esc(w)}</li>`).join("")}</ul><p class="mute">Each player may ask one question.</p></div>`;
+    return c.visual ? txt + sceneV(c) : txt;
   }
 
   function cast() {
@@ -133,13 +134,11 @@
   function sceneV(c) {
     const m = mapHtml(c);
     const im = c.images ? `<img class="sceneimg" src="${esc(c.images.map)}" alt="Floor map of the room"><img class="sceneimg strip-img" src="${esc(c.images.timeline)}" alt="Timeline: 9:00 key on the hook, 9:03 case opened, 9:05 lights flicker, 9:06 cupcake missing">` : "";
-    return `<h2>${esc(c.title)}</h2>${im}
-    ${c.scene.setting ? `<p>${esc(c.scene.setting)}</p>` : ""}
-    <ul class="facts">${c.scene.bullets.map(([i, t]) => `<li>${A.icon(i)}<span>${esc(t)}</span></li>`).join("")}</ul>
+    return `${im}
+    <h3>Floor map</h3>
     <div class="mapwrap" id="mapwrap">${m.map}</div>
     <div class="card spotinfo" id="spotinfo">${m.info}</div>
-    <h3>Timeline</h3>${A.strip(c.strip)}
-    <ul class="facts"><li>${A.icon("eye")}<span>Witness: ${esc(c.scene.witnesses[0])}</span></li><li>${A.icon("ask")}<span>${esc(c.scene.witnesses[1])}</span></li></ul>`;
+    <h3>Timeline at a glance</h3>${A.strip(c.strip)}`;
   }
   function castV(c) {
     return `<h2>The suspects</h2>
