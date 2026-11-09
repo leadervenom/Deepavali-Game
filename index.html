@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#f2eadc">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Burj Khalifa Murder Mystery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Young+Serif&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<svg class="burj" viewBox="0 0 200 300" aria-hidden="true"><polygon points="100,0 101.5,60 108,90 112,90 114,130 120,130 122,180 130,180 132,230 142,230 144,300 56,300 58,230 68,230 70,180 78,180 80,130 86,130 88,90 92,90 98,60"/></svg>
+<header id="top" hidden>
+  <div class="bar"><i id="fill"></i></div>
+  <div class="row"><span id="stepname"></span><span class="hbtns"><button id="nbbtn" hidden aria-label="Notebook"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v18M12 8h4M12 12h4"/></svg></button><button id="bellbtn" aria-label="Phones down"><svg viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 21a2 2 0 0 0 4 0"/></svg></button></span></div>
+</header>
+<main id="app"></main>
+<footer id="foot" hidden>
+  <button id="back" class="btn ghost" aria-label="Back">←</button>
+  <button id="next" class="btn">Next →</button>
+</footer>
+<div id="sheetbg" class="sheetbg" hidden></div>
+<div id="sheet" class="sheet" role="dialog" aria-label="Notebook" hidden></div>
+<div id="down" class="down" hidden>
+  <svg viewBox="0 0 24 24" class="bellbig" aria-label="Tap 3 times to wake"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>
+  <h1>Phones down</h1>
+  <p>Talk to each other.</p>
+  <small>Tap the bell 3 times to wake</small>
+</div>
+<script src="data.js"></script>
+<script src="art.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

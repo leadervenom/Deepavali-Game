@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 110" font-family="Georgia,serif"><rect width="320" height="110" rx="12" fill="#ebe0cc"/>
+<g transform="translate(22 20)"><rect x="0" y="12" width="64" height="44" rx="8" fill="#3d2b20"/><path d="M14 12l6-10h24l6 10" fill="#3d2b20"/><circle cx="32" cy="34" r="13" fill="#b98d6c" stroke="#f6efe3" stroke-width="3"/></g>
+<g fill="#3d2b20"><rect x="108" y="30" width="14" height="40" rx="3"/><rect x="128" y="30" width="14" height="40" rx="3"/><rect x="148" y="30" width="14" height="40" rx="3"/><rect x="168" y="30" width="14" height="40" rx="3"/><rect x="262" y="30" width="14" height="40" rx="3"/></g>
+<rect x="192" y="30" width="62" height="40" rx="3" fill="none" stroke="#9a4a3a" stroke-width="3" stroke-dasharray="6 5"/><text x="223" y="56" font-size="20" fill="#9a4a3a" text-anchor="middle" font-weight="bold">gap</text>
+<g font-size="14" fill="#76675a" text-anchor="middle"><text x="145" y="92">8:55 to 9:02</text><text x="223" y="92">9:02 to 9:08</text><text x="269" y="22" fill="#3d2b20">9:08</text></g></svg>

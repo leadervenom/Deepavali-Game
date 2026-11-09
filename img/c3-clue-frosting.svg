@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 110" font-family="Georgia,serif"><rect width="320" height="110" rx="12" fill="#ebe0cc"/>
+<path d="M30 78L120 28l22 36L52 100z" fill="#3d2b20"/>
+<g fill="#fbf7f0"><circle cx="86" cy="62" r="11"/><circle cx="100" cy="54" r="9"/><circle cx="76" cy="74" r="8"/></g>
+<path d="M160 56H196" stroke="#8a6244" stroke-width="5" stroke-linecap="round"/><path d="M188 46l10 10-10 10" fill="none" stroke="#8a6244" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="238" cy="46" r="26" fill="#fbf7f0" stroke="#3d2b20" stroke-width="5"/><circle cx="238" cy="46" r="13" fill="#f3e6b3"/>
+<text x="238" y="98" font-size="15" fill="#3d2b20" text-anchor="middle" font-weight="bold">vanilla, not gold</text></svg>

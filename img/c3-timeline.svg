@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 170" font-family="Georgia,serif">
+<rect width="640" height="170" fill="#f2eadc"/>
+<path d="M80 54H560" stroke="#d9ccb8" stroke-width="4"/>
+<g fill="#3d2b20"><circle cx="80" cy="54" r="34"/><circle cx="240" cy="54" r="34"/><circle cx="400" cy="54" r="34"/><circle cx="560" cy="54" r="34"/></g>
+<g stroke="#f6efe3" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="68" cy="54" r="8"/><path d="M76 54H96M90 54v8M95 54v6"/>
+<rect x="228" y="54" width="24" height="18" rx="3"/><path d="M233 54V48a7 7 0 0 1 14 0v6"/>
+<path d="M400 38a11 11 0 0 0-6 20c1 1 2 3 2 5h8c0-2 1-4 2-5a11 11 0 0 0-6-20z"/><path d="M381 38l-6-4M419 38l6-4"/>
+<path d="M560 38l16 28h-32z"/><path d="M560 48v9M560 62v.5"/>
+</g>
+<g text-anchor="middle" fill="#3d2b20"><g font-size="30" font-weight="bold"><text x="80" y="124">9:00</text><text x="240" y="124">9:03</text><text x="400" y="124">9:05</text><text x="560" y="124">9:06</text></g>
+<g font-size="19" fill="#76675a"><text x="80" y="152">Key on the hook</text><text x="240" y="152">Case opened</text><text x="400" y="152">Lights flicker</text><text x="560" y="152">Cupcake missing</text></g></g>
+</svg>

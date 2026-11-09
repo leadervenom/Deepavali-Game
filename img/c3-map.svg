@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 440" font-family="Georgia,serif">
+<rect width="640" height="440" fill="#f2eadc"/>
+<rect x="20" y="20" width="600" height="400" rx="18" fill="#fbf7f0" stroke="#3d2b20" stroke-width="6"/>
+<g stroke="#d9ccb8" stroke-width="2" opacity=".7"><path d="M26 100H614M26 170H614M26 240H614M26 310H614M26 380H614"/></g>
+<rect x="598" y="50" width="16" height="330" rx="5" fill="#8a6244"/><path d="M598 150H614M598 280H614" stroke="#f2eadc" stroke-width="4"/>
+<rect x="272" y="410" width="96" height="20" fill="#f2eadc"/><path d="M280 416V392A40 40 0 0 1 360 392" fill="none" stroke="#b9a68c" stroke-width="3" stroke-dasharray="8 6"/>
+<rect x="50" y="52" width="150" height="70" rx="8" fill="#8a6244"/><rect x="66" y="66" width="44" height="28" rx="4" fill="#3d2b20"/><rect x="120" y="70" width="60" height="10" rx="3" fill="#b98d6c"/>
+<circle cx="232" cy="68" r="12" fill="none" stroke="#3d2b20" stroke-width="4"/><path d="M242 68H272M262 68v10M270 68v8" stroke="#3d2b20" stroke-width="4" stroke-linecap="round"/>
+<rect x="48" y="160" width="120" height="66" rx="16" fill="#b98d6c"/><circle cx="76" cy="180" r="10" fill="#f6efe3"/><circle cx="118" cy="180" r="10" fill="#f6efe3"/><path d="M90 206h40" stroke="#f6efe3" stroke-width="5" stroke-linecap="round"/>
+<rect x="262" y="190" width="112" height="112" rx="10" fill="#efe6d8" stroke="#3d2b20" stroke-width="5"/><path d="M274 202L362 290" stroke="#fbf7f0" stroke-width="7" opacity=".9"/>
+<path d="M300 272h40l-5 22h-30z" fill="#b98d6c"/><path d="M296 272a14 14 0 0 1 8-18 14 14 0 0 1 32 0 14 14 0 0 1 8 18z" fill="#e8c36a" stroke="#c8a45e" stroke-width="2"/>
+<g fill="#c8a45e"><circle cx="392" cy="270" r="6"/><circle cx="420" cy="286" r="5"/><circle cx="448" cy="300" r="6"/><circle cx="476" cy="316" r="5"/><circle cx="504" cy="328" r="6"/></g>
+<rect x="520" y="300" width="64" height="40" rx="16" fill="#c9b79e"/><rect x="520" y="350" width="64" height="40" rx="16" fill="#c9b79e"/>
+<g font-size="22" fill="#3d2b20" font-weight="bold" text-anchor="middle">
+<text x="132" y="146" font-size="19">Guide desk (Zara)</text>
+<text x="108" y="250">Coffee cart</text>
+<text x="318" y="326">Display case</text>
+<text x="526" y="290" font-size="16">Window seats</text>
+<text x="252" y="104" font-size="20">Key hook</text>
+</g>
+<g font-size="17" fill="#76675a" text-anchor="middle"><text x="108" y="270">Leo</text><text x="392" y="410" text-anchor="start">Entrance</text></g>
+</svg>
