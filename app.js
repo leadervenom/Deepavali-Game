@@ -29,6 +29,7 @@
   try { Object.assign(unlocked, JSON.parse(store.get("unlocked") || "{}")); } catch (e) {}
   const save = () => store.set("unlocked", JSON.stringify(unlocked));
   const cur = () => D.cases.find((c) => c.id === caseId);
+  const rich = (c) => c && (c.visual || c.rich);
   const guess = {};
 
   // ---------- screens ----------
@@ -47,7 +48,7 @@
 
   function scene() {
     const c = cur(); if (c.visual) return sceneV(c);
-    return `<h2>${esc(c.title)}</h2>
+    return `<h2>${esc(c.title)}</h2>${c.images && c.images.hero ? `<img class="sceneimg" src="${esc(c.images.hero)}" alt="">` : ""}
     <div class="card gold"><div class="lab" style="margin:0">${esc(c.scene.victimLabel || "The victim")}</div>${esc(c.scene.victim)}</div>
     <p>${esc(c.scene.setting)}</p>
     <h3>Timeline everyone knows</h3>
@@ -56,7 +57,7 @@
   }
 
   function cast() {
-    const c = cur(); if (c.visual) return castV(c);
+    const c = cur(); if (rich(c)) return castV(c);
     return `<h2>Meet the suspects</h2><p class="mute">Swipe through. Everyone here has a secret.</p>
     <div class="car" id="car">${c.cast.map((p) => `<div class="card"><h3>${esc(p.name)}</h3><span class="tag">${esc(p.title)}</span><p>${esc(p.bio)}</p></div>`).join("")}</div>
     <div class="dots" id="dots">${c.cast.map((_, i) => `<i class="${i ? "" : "on"}"></i>`).join("")}</div>`;
@@ -65,6 +66,14 @@
   function role() {
     const c = cur(), r = unlocked["r_" + c.id];
     if (r && r.rows) return roleV(c, r);
+    if (r && rich(c)) {
+      const p = c.cast.find((x) => x.name === r.name);
+      const row = (ic, lab, t, col) => `<div class="rrow">${A.icon(ic)}<div><div class="lab"${col ? ` style="color:${col}"` : ""}>${lab}</div>${esc(t)}</div></div>`;
+      return `<p class="mute">Private. Keep your screen hidden.</p><div class="${justUnlocked ? "flip" : ""}"><div class="rhead">${A.portrait(p && p.portrait)}<div><h2>${esc(r.name)}</h2><span class="tag">${esc(r.title)}</span></div></div>
+      ${r.killerNote ? `<div class="card danger"><div class="rrow" style="border:0;padding:0">${A.icon("alert")}<div><div class="lab" style="color:var(--danger);margin:0">Secret instructions</div>${esc(r.killerNote)}</div></div></div>` : ""}
+      <div class="card gold">${row("user", "Your bio", r.bio)}${row("lock", "Your secret (you may dodge)", r.secret)}${row("eye", "What you know (never lie about it)", r.know)}${row("clock", "Your alibi", r.alibi)}</div></div>
+      <button class="btn ghost" data-act="hiderole">Hide my card</button>`;
+    }
     if (r) return `<p class="mute">Private. Keep your screen hidden.</p><div class="${justUnlocked ? "flip" : ""}"><h2>${esc(r.name)}</h2><span class="tag">${esc(r.title)}</span>
       ${r.killerNote ? `<div class="card danger shine"><div class="lab" style="color:var(--danger);margin:0">Secret instructions</div>${esc(r.killerNote)}</div>` : ""}
       <div class="card gold shine"><div class="lab" style="margin:0">Your bio</div>${esc(r.bio)}
@@ -92,7 +101,7 @@
 
   function vote() {
     const c = cur(), g = guess[c.id];
-    if (c.visual) return voteV(c);
+    if (rich(c)) return voteV(c);
     return `<h2>Who did it?</h2><p>Tap your suspect. When the narrator counts to three, point at them!</p>
     ${c.cast.map((p, i) => `<div class="card pick ${g === i ? "on" : ""}" data-pick="${i}"><div class="av">${esc(p.name[0])}</div><div><b>${esc(p.name)}</b><br><span class="mute">${esc(p.title)}</span></div></div>`).join("")}
     <button class="btn ghost" data-act="restart">Switch case / start over</button>`;
@@ -134,7 +143,7 @@
   }
   function castV(c) {
     return `<h2>The suspects</h2>
-    <div class="car" id="car">${c.cast.map((p) => `<div class="card pcard">${A.portrait(p.portrait)}<h3>${esc(p.name)}</h3><span class="tag">${esc(p.title)}</span>${p.bio ? `<p>${esc(p.bio)}</p>` : ""}<ul>${li(p.bullets)}</ul></div>`).join("")}</div>
+    <div class="car" id="car">${c.cast.map((p) => `<div class="card pcard">${A.portrait(p.portrait)}<h3>${esc(p.name)}</h3><span class="tag">${esc(p.title)}</span>${p.bio ? `<p>${esc(p.bio)}</p>` : ""}${p.bullets ? `<ul>${li(p.bullets)}</ul>` : ""}</div>`).join("")}</div>
     <div class="dots" id="dots">${c.cast.map((_, i) => `<i class="${i ? "" : "on"}"></i>`).join("")}</div>`;
   }
   function roleV(c, r) {
@@ -160,7 +169,7 @@
     ${n.p.length ? `<ul class="pinlist">${n.p.map((t) => `<li>${A.icon("pin")}${esc(t)}</li>`).join("")}</ul>` : `<p class="mute">Tap the pin on a clue to keep it here.</p>`}
     <button class="btn ghost" data-nbact="clear">Clear notebook</button>`;
   }
-  function openSheet() { const c = cur(); if (!c || !c.visual) return; $("#sheet").innerHTML = sheetHtml(c); $("#sheet").hidden = $("#sheetbg").hidden = false; }
+  function openSheet() { const c = cur(); if (!rich(c)) return; $("#sheet").innerHTML = sheetHtml(c); $("#sheet").hidden = $("#sheetbg").hidden = false; }
   function closeSheet() { $("#sheet").hidden = $("#sheetbg").hidden = true; }
   $("#nbbtn").onclick = openSheet; $("#sheetbg").onclick = closeSheet;
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeSheet(); });
@@ -207,7 +216,7 @@
     const key = STEPS[step][0];
     app.innerHTML = views[key]();
     app.className = "enter" + (dir < 0 ? " back" : "");
-    $("#nbbtn").hidden = !(cur() && cur().visual);
+    $("#nbbtn").hidden = !rich(cur());
     $("#fill").style.transform = `scaleX(${step / (STEPS.length - 1)})`;
     $("#stepname").textContent = `${step} / ${STEPS.length - 1} · ${STEPS[step][1]}`;
     $("#back").style.visibility = step <= 1 ? "hidden" : "visible";
